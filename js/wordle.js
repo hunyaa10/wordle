@@ -33,13 +33,24 @@ function appStart() {
     // 오타확률이 높기때문에 추천하지는 않음
     const div = document.createElement("div");
     const body = document.querySelector("body");
+    // 추가작업 : 재시도버튼
+    const btn = document.createElement("button");
 
     div.innerText = "Game Over!";
     div.style =
-      "width: 100%; height: 100%; background-color: #ffffffa0; display:flex; justify-content:center; align-items:center; position:absolute; top:50%; left:50%; transform: translate(-50%,-50%); font-size:50px; font-weight:900; color:red;";
+      "width: 100%; height: 100vh; background-color: #ffffffe1; display:flex; justify-content:center; align-items:center; position:absolute; top:50%; left:50%; transform: translate(-50%,-50%); font-size:50px; font-weight:900; color:red;";
     body.style = "position:relative;";
+    btn.innerText = "Retry";
+    btn.style =
+      "display: block; padding: 4px 8px; cursor: pointer; position:absolute; z-index: 99; top: 60%; left: 50%; transform: translateX(-50%)";
 
     document.body.appendChild(div);
+    document.body.appendChild(btn);
+
+    // 추가작업 : 버튼클릭 시 화면새로고침
+    btn.addEventListener("click", () => {
+      location.reload();
+    });
   };
 
   // 구현순서[4] : 게임종료
@@ -50,15 +61,6 @@ function appStart() {
 
     // 추가작업 : 게임종료 시 타이머를 클리어함
     clearInterval(timer);
-  };
-
-  // 구현순서[3] : 다음줄로 이동
-  const nextLine = () => {
-    attempts += 1; // 시도값 증가
-    index = 0; // 인덱스값 초기화
-
-    // 6줄이 될 경우 게임종료
-    if (attempts === 6) return gameover();
   };
 
   // 구현순서[2] : 엔터키 입력
@@ -94,11 +96,37 @@ function appStart() {
       }
     }
 
-    // 엔터키 누르면 다음 줄로가는 함수호출
-    nextLine();
+    // 구현순서[3] : 다음줄로 이동
+    // 시도값은 증가시키고, 인덱스값은 초기화시킴
+    attempts += 1;
+    index = 0;
 
-    // 알파벳 5글자가 모두 정답과 일치할 경우 게임종료
-    if (맞은갯수 === 5) gameover();
+    // 조건에 따라 게임종료
+    if (맞은갯수 === 5) {
+      correctAnswer();
+    } else if (attempts === 6 && 맞은갯수 !== 5) {
+      gameover();
+    }
+  };
+
+  // 추가작업 : 정답 시 화면css
+  const correctAnswer = () => {
+    const div = document.createElement("div");
+    const body = document.querySelector("body");
+    const img = document.createElement("img");
+
+    div.innerText = "정답입니다!";
+    div.style =
+      "width: 100%; height: 100%; background-color: #ffffffe1; display:flex; justify-content:center; align-items:center; position:absolute; top:50%; left:50%; transform: translate(-50%,-50%); font-size:50px; font-weight:900; color:green;";
+    body.style = "position:relative;";
+    img.src = "./img/흰둥이.webp";
+    img.style =
+      "width:100px; position:absolute; z-index: 99; top: 30%; left: 45%; animation: spin 2s infinite linear;";
+
+    document.body.appendChild(div);
+    document.body.appendChild(img);
+
+    clearInterval(timer);
   };
 
   // 추가작업 : 키패드 클릭

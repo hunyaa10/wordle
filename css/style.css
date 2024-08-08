@@ -103,3 +103,13 @@ section {
   transform: translateY(50%);
 }
 /* //section */
+
+/* 흰둥이 애니메이션 */
+@keyframes spin {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
