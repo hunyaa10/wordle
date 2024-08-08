@@ -8,7 +8,7 @@ let index = 0;
 function appStart() {
   // 전체를 함수로 감쌈
 
-  // 구현순서[6]
+  // 구현순서[6] : 백스페이스
   const handleBackspace = () => {
     if (index > 0) {
       /* ★★★★★
@@ -27,7 +27,7 @@ function appStart() {
     }
   };
 
-  // 구현순서[5]
+  // 구현순서[5] : 게임종료 시 화면css
   const displayGameover = () => {
     // 자바로 html 구현해보기
     // 오타확률이 높기때문에 추천하지는 않음
@@ -42,7 +42,7 @@ function appStart() {
     document.body.appendChild(div);
   };
 
-  // 구현순서[4]
+  // 구현순서[4] : 게임종료
   const gameover = () => {
     // 조건충족 시 키보드 이벤트 종료
     window.removeEventListener("keydown", handleKeydown);
@@ -52,7 +52,7 @@ function appStart() {
     clearInterval(timer);
   };
 
-  // 구현순서[3]
+  // 구현순서[3] : 다음줄로 이동
   const nextLine = () => {
     attempts += 1; // 시도값 증가
     index = 0; // 인덱스값 초기화
@@ -61,7 +61,7 @@ function appStart() {
     if (attempts === 6) return gameover();
   };
 
-  // 구현순서[2]
+  // 구현순서[2] : 엔터키 입력
   const handleEnterKey = () => {
     let 맞은갯수 = 0;
 
@@ -101,7 +101,27 @@ function appStart() {
     if (맞은갯수 === 5) gameover();
   };
 
-  // 구현순서[1]
+  // 추가작업 : 키패드 클릭
+  let keypad = document.querySelectorAll(".key");
+  keypad.forEach((e) => {
+    e.addEventListener("click", () => {
+      const keyWord = e.getAttribute("data-key");
+      const thisBlock = document.querySelector(
+        `.board-column[data-index='${attempts}${index}']`
+      );
+
+      if (keyWord === "back") handleBackspace();
+      else if (index === 5) {
+        if (keyWord === "enter") handleEnterKey();
+        else return;
+      } else {
+        thisBlock.innerText = keyWord;
+        index++;
+      }
+    });
+  });
+
+  // 구현순서[1] : 알파벳 입력
   const handleKeydown = (e) => {
     // console.log("키 눌림! event=>", e);
     // 콘솔창에 어떤 이벤트가 발생했는지 보여줌
