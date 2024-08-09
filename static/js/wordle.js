@@ -1,5 +1,3 @@
-const 정답 = "APPLE";
-
 // handleKeydown 함수에서 초기 시도값, 초기 인덱스값
 let attempts = 0;
 let index = 0;
@@ -64,8 +62,17 @@ function appStart() {
   };
 
   // 구현순서[2] : 엔터키 입력
-  const handleEnterKey = () => {
+  const handleEnterKey = async () => {
     let 맞은갯수 = 0;
+    // ★★★★★파이썬으로 백앤드와 정보교환연습★★★★★
+    // 서버에 요청을 보내는 비동기로직
+    const 응답 = await fetch("/answer");
+    // await: 서버로 요청을 보낸 후 응답이 올때까지 기다림(async와 함께 사용)
+    // fetch(): 자바스크립트에서 서버로 정보를 요청할 때 쓰는 함수
+    const 정답 = await 응답.json();
+    // 정답을 불러옴
+    // json(): 받은 응답을 json 포멧으로 바꿔줌
+    // await: 포멧이 변경될때까지 기다림
 
     // 1. for문을 사용하여 박스를 하나씩 호출함
     for (let i = 0; i < 5; i++) {
